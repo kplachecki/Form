@@ -20,7 +20,7 @@ const input = props => {
         />
       );
       break;
-    case "textarea" && "input":
+    case "textarea":
       inputElement = (
         <textarea
           className={inputClasses.join(" ")}
