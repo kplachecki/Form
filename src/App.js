@@ -6,8 +6,6 @@ import employes from "./mocks/employes.json";
 
 class App extends Component {
   state = {
-    currentUser: "walter.nelson@hussa.rs",
-    formIsValid: false,
     formElements: {
       title: {
         form: "About",
@@ -61,22 +59,22 @@ class App extends Component {
             {
               type: "radio",
               name: "payment",
-              checked: true,
+              defaultChecked: true,
               value: "Free Event"
             },
-            { type: "radio", name: "payment", value: "Paid Event" }
+            {
+              type: "radio",
+              name: "payment",
+              value: "Paid Event"
+            },
+            {
+              type: "number",
+              name: "fee"
+            }
           ]
-          // free: {
-          //   type: "radio",
-          //   name: "payment",
-          //   checked: true
-          // },
-          // paid: {
-          //   type: "radio",
-          //   name: "payment"
-          // }
         },
         value: "",
+        feeValue: "",
         validation: {},
         valid: true
       },
@@ -128,22 +126,25 @@ class App extends Component {
         elementConfig: {
           date: {
             type: "date",
-            placeholder: "dd/mm/yy"
+            placeholder: "dd/mm/yy",
+            name: "date"
           },
           time: {
             type: "time",
-            placeholder: "--:--"
+            placeholder: "--:--",
+            name: "time"
           },
           radio: [
             {
               type: "radio",
-              name: "startsOn",
-              value: "AM"
+              name: "radio",
+              value: "AM",
+              defaultChecked: true
             },
-            { type: "radio", name: "startsOn", value: "PM" }
+            { type: "radio", name: "radio", value: "PM" }
           ]
         },
-        value: { date: "", time: "", radio: "" },
+        value: { date: "", time: "", radio: "AM" },
         validation: {
           date: { required: true },
           time: { required: true },
@@ -177,12 +178,34 @@ class App extends Component {
       when: {
         title: "When"
       }
+    },
+    currentUser: "walter.nelson@hussa.rs",
+    formIsValid: false
+  };
+
+  inputChangeHandler = (event, inputElement) => {
+    const updatedForm = { ...this.state.formElements };
+    const updatedFormElement = { ...updatedForm[inputElement] };
+
+    if (inputElement === "startsOn") {
+      updatedFormElement.value[event.target.name] = event.target.value;
+      updatedForm[inputElement] = updatedFormElement;
+      this.setState({ formElements: updatedForm });
+    } else if (event.target.name === "fee") {
+      updatedFormElement.feeValue = event.target.value;
+      updatedForm[inputElement] = updatedFormElement;
+      this.setState({ formElements: updatedForm });
+    } else {
+      updatedFormElement.value = event.target.value;
+      updatedForm[inputElement] = updatedFormElement;
+      this.setState({ formElements: updatedForm });
     }
   };
+
   render() {
     return (
       <React.Fragment>
-        <Header /> <Forms {...this.state} />
+        <Header /> <Forms {...this.state} changed={this.inputChangeHandler} />
       </React.Fragment>
     );
   }

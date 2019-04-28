@@ -19,6 +19,7 @@ const inputSwitcher = props => {
           {...props.elementConfig}
           value={props.value}
           onChange={props.changed}
+          payment={props.payment}
         />
       );
       break;
@@ -82,11 +83,24 @@ const inputSwitcher = props => {
         />
       );
   }
+  let bigComment = null;
+
+  if (props.id === "reward") {
+    bigComment = <span>reward points for attendance</span>;
+  }
+
+  if (props.id === "duration") {
+    bigComment = <span>hour</span>;
+  }
+  // if (props.id === "payment" && props.value === "Paid Event") {
+  //   feeInput = <input type="number" />;
+  // }
 
   return (
     <div className={classes.Input}>
       <label className={classes.Label}>{props.label}</label>
       {inputElement}
+      {bigComment}
     </div>
   );
 };
