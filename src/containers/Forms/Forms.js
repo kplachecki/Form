@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import classes from "./Forms.module.css";
-import Input from "../../components/UI/Input/Input";
+import InputSwitcher from "../../containers/InputSwitcher/InputSwitcher";
 import Form from "./Form/Form";
 
 class Forms extends Component {
@@ -26,11 +26,11 @@ class Forms extends Component {
       <React.Fragment>
         {formPartsArray.map(formPart => {
           return (
-            <Form title={formPart.config.title}>
+            <Form title={formPart.config.title} key={formPart.id}>
               {formElementsArray.map(formElement => {
                 if (formElement.config.form === formPart.config.title) {
                   return (
-                    <Input
+                    <InputSwitcher
                       key={formElement.id}
                       elementType={formElement.config.elementType}
                       elementConfig={formElement.config.elementConfig}
@@ -42,6 +42,7 @@ class Forms extends Component {
                         this.inputChangedHandler(event, formElement.id)
                       }
                       label={formElement.config.label}
+                      currentUser={this.props.currentUser}
                     />
                   );
                 } else return false;

@@ -1,9 +1,13 @@
 import React, { Component } from "react";
 import Header from "./containers/Header/Header";
 import Forms from "./containers/Forms/Forms";
+import categories from "./mocks/categories.json";
+import employes from "./mocks/employes.json";
 
 class App extends Component {
   state = {
+    currentUser: "walter.nelson@hussa.rs",
+    formIsValid: false,
     formElements: {
       title: {
         form: "About",
@@ -21,11 +25,11 @@ class App extends Component {
       description: {
         form: "About",
         label: "description",
-        elementType: "input",
+        elementType: "textarea",
         elementConfig: {
-          type: "textarea",
           placeholder: "Write about your event, be creative",
-          maxLength: 140
+          maxLength: 140,
+          rows: 5
         },
         value: "",
         validation: { required: true },
@@ -37,8 +41,11 @@ class App extends Component {
         label: "category",
         elementType: "select",
         elementConfig: {
-          options: [],
-          placeholder: "Select category"
+          options: (categories.unshift({
+            id: "default",
+            name: "Select Category"
+          }),
+          categories)
         },
         value: "",
         validation: {},
@@ -49,7 +56,25 @@ class App extends Component {
         label: "payment",
         elementType: "input",
         elementConfig: {
-          type: "radio"
+          type: "radio",
+          options: [
+            {
+              type: "radio",
+              name: "payment",
+              checked: true,
+              value: "Free Event"
+            },
+            { type: "radio", name: "payment", value: "Paid Event" }
+          ]
+          // free: {
+          //   type: "radio",
+          //   name: "payment",
+          //   checked: true
+          // },
+          // paid: {
+          //   type: "radio",
+          //   name: "payment"
+          // }
         },
         value: "",
         validation: {},
@@ -73,7 +98,8 @@ class App extends Component {
         label: "responsible",
         elementType: "select",
         elementConfig: {
-          options: []
+          options: employes,
+          groups: [{ label: "Me" }, { label: "Others" }]
         },
         value: "",
         validation: { required: true },
@@ -108,9 +134,14 @@ class App extends Component {
             type: "time",
             placeholder: "--:--"
           },
-          radio: {
-            type: "radio"
-          }
+          radio: [
+            {
+              type: "radio",
+              name: "startsOn",
+              value: "AM"
+            },
+            { type: "radio", name: "startsOn", value: "PM" }
+          ]
         },
         value: { date: "", time: "", radio: "" },
         validation: {
@@ -124,6 +155,7 @@ class App extends Component {
 
       duration: {
         form: "When",
+        label: "duration",
         elementType: "input",
         elementConfig: {
           type: "number",
@@ -145,8 +177,7 @@ class App extends Component {
       when: {
         title: "When"
       }
-    },
-    formIsValid: false
+    }
   };
   render() {
     return (
