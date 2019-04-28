@@ -8,11 +8,16 @@ const mixedInput = props => {
         value={props.value.date}
         onChange={props.onChange}
       />
-      <input {...props.time} value={props.value} onChange={props.onChange} />
+      <span>at</span>
+      <input
+        {...props.time}
+        value={props.value.time}
+        onChange={props.onChange}
+      />
       {props.radio.map(time => {
         return (
           <label key={time.value}>
-            <input {...time} onChange={props.changed} />
+            <input {...time} onChange={props.onChange} />
             {time.value}
           </label>
         );

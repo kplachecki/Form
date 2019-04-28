@@ -32,6 +32,7 @@ class Forms extends Component {
                   return (
                     <InputSwitcher
                       key={formElement.id}
+                      id={formElement.id}
                       elementType={formElement.config.elementType}
                       elementConfig={formElement.config.elementConfig}
                       value={formElement.config.value}
@@ -39,10 +40,11 @@ class Forms extends Component {
                       shouldValidate={formElement.config.validation}
                       touched={formElement.config.touched}
                       changed={event =>
-                        this.inputChangedHandler(event, formElement.id)
+                        this.props.changed(event, formElement.id)
                       }
                       label={formElement.config.label}
                       currentUser={this.props.currentUser}
+                      payment={this.props.formElements.payment.value}
                     />
                   );
                 } else return false;
