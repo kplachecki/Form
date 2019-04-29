@@ -8,14 +8,14 @@ const inputSwitcher = props => {
   let inputElement = null;
   const inputClasses = [classes.InputElement];
 
-  // if (props.invalid && props.shouldValidate && props.touched) {
-  //   inputClasses.push(classes.Invalid);
-  // }
-
   switch (props.elementType) {
     case "input":
+      if (!props.valid && props.shouldValidate && props.touched) {
+        inputClasses.push(classes.Invalid);
+      }
       inputElement = (
         <Input
+          className={inputClasses.join(" ")}
           {...props.elementConfig}
           value={props.value}
           onChange={props.changed}
@@ -24,6 +24,9 @@ const inputSwitcher = props => {
       );
       break;
     case "textarea":
+      if (!props.valid && props.shouldValidate && props.touched) {
+        inputClasses.push(classes.Invalid);
+      }
       inputElement = (
         <textarea
           className={inputClasses.join(" ")}
@@ -34,6 +37,9 @@ const inputSwitcher = props => {
       );
       break;
     case "select":
+      if (!props.valid && props.shouldValidate && props.touched) {
+        inputClasses.push(classes.Invalid);
+      }
       inputElement = (
         <Select
           {...props.elementConfig}
@@ -50,27 +56,10 @@ const inputSwitcher = props => {
           {...props.elementConfig}
           value={props.value}
           onChange={props.changed}
+          valid={props.valid}
+          shouldValidate={props.shouldValidate}
+          touched={props.touched}
         />
-        // <React.Fragment>
-        //   <input
-        //     className={inputClasses.join(" ")}
-        //     {...props.elementConfig.date}
-        //     value={props.value.date}
-        //     onChange={props.changed}
-        //   />
-        //   <input
-        //     className={inputClasses.join(" ")}
-        //     {...props.elementConfig.time}
-        //     value={props.value}
-        //     onChange={props.changed}
-        //   />
-        //   <input
-        //     className={inputClasses.join(" ")}
-        //     {...props.elementConfig.radio}
-        //     value={props.value}
-        //     onChange={props.changed}
-        //   />
-        // </React.Fragment>
       );
       break;
     default:
@@ -92,9 +81,6 @@ const inputSwitcher = props => {
   if (props.id === "duration") {
     bigComment = <span>hour</span>;
   }
-  // if (props.id === "payment" && props.value === "Paid Event") {
-  //   feeInput = <input type="number" />;
-  // }
 
   return (
     <div className={classes.Input}>
