@@ -69,14 +69,18 @@ class App extends Component {
             },
             {
               type: "number",
-              name: "fee"
+              name: "fee",
+              placeholder: "Fee"
             }
           ]
         },
-        value: "",
-        feeValue: "",
+        value: "Free Event",
         validation: {},
-        valid: true
+        valid: true,
+        feeValue: "",
+        feeValid: false,
+        feeValidation: { required: true },
+        feeTouched: false
       },
       reward: {
         form: "About",
@@ -131,6 +135,8 @@ class App extends Component {
           },
           time: {
             type: "time",
+            min: "00:00",
+            max: "12:00",
             placeholder: "--:--",
             name: "time"
           },
@@ -146,12 +152,12 @@ class App extends Component {
         },
         value: { date: "", time: "", radio: "AM" },
         validation: {
-          date: { required: true },
+          date: { required: true, isDate: true },
           time: { required: true },
           radio: {}
         },
         valid: { date: false, time: false, radio: true },
-        touched: false
+        touched: { date: false, time: false, radio: true }
       },
 
       duration: {
@@ -183,20 +189,61 @@ class App extends Component {
     formIsValid: false
   };
 
+  checkValidity = (value, rules) => {
+    let isValid = true;
+
+    if (rules.required) {
+      isValid = value.trim() !== "" && isValid;
+    }
+
+    if (rules.isEmail) {
+      let regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      isValid = regex.test(value) && isValid;
+    }
+
+    if (rules.isDate) {
+      let today = new Date();
+      const dd = String(today.getDate()).padStart(2, "0");
+      const mm = String(today.getMonth() + 1).padStart(2, "0");
+      const yyyy = today.getFullYear();
+
+      today = yyyy + "-" + mm + "-" + dd;
+      isValid = today < value && isValid;
+    }
+
+    return isValid;
+  };
+
   inputChangeHandler = (event, inputElement) => {
     const updatedForm = { ...this.state.formElements };
     const updatedFormElement = { ...updatedForm[inputElement] };
 
     if (inputElement === "startsOn") {
       updatedFormElement.value[event.target.name] = event.target.value;
+      updatedFormElement.valid[event.target.name] = this.checkValidity(
+        updatedFormElement.value[event.target.name],
+        updatedFormElement.validation[event.target.name]
+      );
+      updatedFormElement.touched[event.target.name] = true;
       updatedForm[inputElement] = updatedFormElement;
       this.setState({ formElements: updatedForm });
     } else if (event.target.name === "fee") {
       updatedFormElement.feeValue = event.target.value;
+      updatedFormElement.feeValid = this.checkValidity(
+        updatedFormElement.feeValue,
+        updatedFormElement.feeValidation
+      );
+      updatedFormElement.feeTouched = true;
       updatedForm[inputElement] = updatedFormElement;
       this.setState({ formElements: updatedForm });
     } else {
       updatedFormElement.value = event.target.value;
+      updatedFormElement.valid = this.checkValidity(
+        updatedFormElement.value,
+        updatedFormElement.validation
+      );
+      updatedFormElement.touched = true;
+
       updatedForm[inputElement] = updatedFormElement;
       this.setState({ formElements: updatedForm });
     }

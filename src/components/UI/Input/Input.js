@@ -1,4 +1,5 @@
 import React from "react";
+import classes from "./../MixedInput/MixedInput.module.css";
 
 const input = props => {
   if (props.type === "radio") {
@@ -11,9 +12,29 @@ const input = props => {
           </label>
         );
       } else {
-        if (props.payment === "Paid Event") {
+        if (props.payment.value === "Paid Event") {
+          const feeClasses = [];
+          console.log(
+            !props.payment.feeValid,
+            props.payment.feeValidation.required,
+            props.payment.feeTouched
+          );
+          if (
+            !props.payment.feeValid &&
+            props.payment.feeValidation &&
+            props.payment.feeTouched
+          ) {
+            feeClasses.push(classes.Invalid);
+          }
           return (
-            <input key={option.name} {...option} onChange={props.onChange} />
+            <React.Fragment key={option.name}>
+              <input
+                {...option}
+                className={feeClasses.join(" ")}
+                onChange={props.onChange}
+              />
+              <span>$</span>
+            </React.Fragment>
           );
         } else return null;
       }

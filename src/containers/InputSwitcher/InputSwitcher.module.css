@@ -1,27 +1,32 @@
 .Input {
-  width: 100%;
-  padding: 10px;
-  box-sizing: border-box;
+  grid-template-columns: [label] 16% [input] auto [validation] 25%;
+  margin: 10px auto;
 }
 
 .Label {
-  width: 20%;
+  grid-column-start: [label];
+  grid-column-end: [label];
   font-weight: bold;
   margin-bottom: 8px;
+  text-transform: uppercase;
 }
 
-.InputElement {
+/* .InputElement {
   border: 1px solid #ccc;
   background-color: white;
   font: inherit;
-}
+} */
+/* 
+.InputElement {
+  grid-column-start: [input];
+  grid-column-end: [input];
+} */
 
-.InputElement:focus {
+/* .InputElement:focus {
   outline: none;
-  background-color: #ccc;
-}
+  background-color: red;
+} */
 
 .Invalid {
   border: 1px solid red;
-  background-color: #fda49a;
 }

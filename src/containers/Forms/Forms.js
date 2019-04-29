@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import classes from "./Forms.module.css";
 import InputSwitcher from "../../containers/InputSwitcher/InputSwitcher";
 import Form from "./Form/Form";
 
@@ -36,7 +35,7 @@ class Forms extends Component {
                       elementType={formElement.config.elementType}
                       elementConfig={formElement.config.elementConfig}
                       value={formElement.config.value}
-                      invalid={!formElement.config.valid}
+                      valid={formElement.config.valid}
                       shouldValidate={formElement.config.validation}
                       touched={formElement.config.touched}
                       changed={event =>
@@ -44,7 +43,7 @@ class Forms extends Component {
                       }
                       label={formElement.config.label}
                       currentUser={this.props.currentUser}
-                      payment={this.props.formElements.payment.value}
+                      payment={this.props.formElements.payment}
                     />
                   );
                 } else return false;
