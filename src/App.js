@@ -46,6 +46,7 @@ class App extends Component {
           categories)
         },
         value: "",
+        valueID: null,
         validation: {},
         valid: true
       },
@@ -74,13 +75,10 @@ class App extends Component {
             }
           ]
         },
-        value: "Free Event",
-        validation: {},
-        valid: true,
-        feeValue: "",
-        feeValid: false,
-        feeValidation: { required: true },
-        feeTouched: false
+        value: { radio: "Free Event", fee: "" },
+        validation: { radio: {}, fee: { required: false } },
+        valid: { radio: true, fee: false },
+        touched: { radio: true, fee: false }
       },
       reward: {
         form: "About",
@@ -120,7 +118,7 @@ class App extends Component {
           required: false,
           isEmail: true
         },
-        valid: false,
+        valid: true,
         touched: false
       },
       startsOn: {
@@ -153,7 +151,7 @@ class App extends Component {
         value: { date: "", time: "", radio: "AM" },
         validation: {
           date: { required: true, isDate: true },
-          time: { required: true },
+          time: { required: true, isTime: true },
           radio: {}
         },
         valid: { date: false, time: false, radio: true },
@@ -186,7 +184,79 @@ class App extends Component {
       }
     },
     currentUser: "walter.nelson@hussa.rs",
-    formIsValid: false
+    formIsValid: false,
+    posted: false
+  };
+
+  dateTimeHandler = (formElements, dateTime) => {
+    let time = formElements.startsOn.value.time;
+    const date = formElements.startsOn.value.date;
+    let [hours, minutes] = time.split(":");
+    const modifier = formElements.startsOn.value.radio;
+
+    if (hours === "12") {
+      hours = "00";
+    }
+
+    if (modifier === "PM") {
+      hours = parseInt(hours, 10) + 12;
+    }
+    time = `${hours}:${minutes}`;
+    dateTime = `${date}${"T"}${time}`;
+
+    return dateTime;
+  };
+
+  formSubmitHandler = event => {
+    event.preventDefault();
+    const formElements = { ...this.state.formElements };
+    let paidEvent = false;
+    let categoryID = null;
+    let coordinatorEmail = "";
+    let coordinatorID = "";
+    let dateTime = "";
+
+    if (formElements.payment.value !== "Free Event") {
+      paidEvent = true;
+    }
+
+    formElements.category.elementConfig.options.map(category => {
+      if (category.name === formElements.category.value) {
+        return (categoryID = category.id);
+      } else return false;
+    });
+
+    formElements.responsible.elementConfig.options.map(coordinator => {
+      if (
+        coordinator.name + " " + coordinator.lastname ===
+        formElements.responsible.value
+      ) {
+        return (
+          (coordinatorEmail = coordinator.email),
+          (coordinatorID = coordinator.id)
+        );
+      } else return false;
+    });
+
+    dateTime = this.dateTimeHandler(formElements, dateTime);
+
+    const form = {
+      title: formElements.title.value,
+      description: formElements.description.value,
+      category_id: categoryID,
+      paid_event: paidEvent,
+      event_fee: formElements.payment.value.fee,
+      reward: formElements.reward.value,
+      date: dateTime,
+      duration: formElements.duration.value * 3600,
+      coordinator: {
+        email: coordinatorEmail,
+        id: coordinatorID
+      }
+    };
+
+    this.setState({ posted: true });
+    console.log(form);
   };
 
   checkValidity = (value, rules) => {
@@ -199,6 +269,9 @@ class App extends Component {
     if (rules.isEmail) {
       let regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       isValid = regex.test(value) && isValid;
+      if (value === "") {
+        isValid = true;
+      }
     }
 
     if (rules.isDate) {
@@ -208,7 +281,11 @@ class App extends Component {
       const yyyy = today.getFullYear();
 
       today = yyyy + "-" + mm + "-" + dd;
-      isValid = today < value && isValid;
+      isValid = today <= value && isValid;
+    }
+
+    if (rules.isTime) {
+      isValid = value <= "12:59" && value > "00:59" && isValid;
     }
 
     return isValid;
@@ -227,15 +304,34 @@ class App extends Component {
       updatedFormElement.touched[event.target.name] = true;
       updatedForm[inputElement] = updatedFormElement;
       this.setState({ formElements: updatedForm });
-    } else if (event.target.name === "fee") {
-      updatedFormElement.feeValue = event.target.value;
-      updatedFormElement.feeValid = this.checkValidity(
-        updatedFormElement.feeValue,
-        updatedFormElement.feeValidation
-      );
-      updatedFormElement.feeTouched = true;
-      updatedForm[inputElement] = updatedFormElement;
-      this.setState({ formElements: updatedForm });
+      this.formValidationCheckout(updatedForm);
+    } else if (inputElement === "payment") {
+      if (event.target.value === "Paid Event") {
+        updatedFormElement.value.radio = event.target.value;
+        updatedFormElement.validation.fee.required = true;
+        updatedForm[inputElement] = updatedFormElement;
+        this.setState({ formElements: updatedForm });
+        this.formValidationCheckout(updatedForm);
+      } else if (event.target.value === "Free Event") {
+        updatedFormElement.value.radio = event.target.value;
+        updatedFormElement.validation.fee.required = false;
+        updatedFormElement.touched.fee = false;
+        updatedFormElement.value.fee = "";
+        updatedForm[inputElement] = updatedFormElement;
+        this.setState({ formElements: updatedForm });
+        this.formValidationCheckout(updatedForm);
+      } else if (event.target.name === "fee") {
+        updatedFormElement.value.fee = event.target.value;
+        updatedFormElement.valid.fee = this.checkValidity(
+          updatedFormElement.value.fee,
+          updatedFormElement.validation.fee
+        );
+        updatedFormElement.touched.fee = true;
+
+        updatedForm[inputElement] = updatedFormElement;
+        this.setState({ formElements: updatedForm });
+        this.formValidationCheckout(updatedForm);
+      }
     } else {
       updatedFormElement.value = event.target.value;
       updatedFormElement.valid = this.checkValidity(
@@ -245,14 +341,50 @@ class App extends Component {
       updatedFormElement.touched = true;
 
       updatedForm[inputElement] = updatedFormElement;
+
       this.setState({ formElements: updatedForm });
+      this.formValidationCheckout(updatedForm);
     }
+  };
+
+  formValidationCheckout = form => {
+    let isValid = false;
+    let payment = true;
+    if (
+      form.payment.value.radio === "Paid Event" &&
+      form.payment.valid.fee === false
+    ) {
+      payment = false;
+    }
+    isValid = {
+      title: form.title.valid,
+      description: form.description.valid,
+      payment: payment,
+      email: form.email.valid,
+      date: form.startsOn.valid.date,
+      timie: form.startsOn.valid.time
+    };
+
+    let formIsValid = true;
+    Object.values(isValid).map(element => {
+      if (element && formIsValid) {
+        return (formIsValid = true);
+      } else return (formIsValid = false);
+    });
+
+    this.setState({ formIsValid: formIsValid });
   };
 
   render() {
     return (
       <React.Fragment>
-        <Header /> <Forms {...this.state} changed={this.inputChangeHandler} />
+        <Header />
+        <Forms
+          {...this.state}
+          changed={this.inputChangeHandler}
+          submit={this.formSubmitHandler}
+          btnState={this.state.formIsValid}
+        />
       </React.Fragment>
     );
   }

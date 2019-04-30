@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import InputSwitcher from "../../containers/InputSwitcher/InputSwitcher";
 import Form from "./Form/Form";
+import SuccessMessage from "./../SuccessMessage/SuccessMessage";
+import classes from "./Form/Form.module.css";
 
 class Forms extends Component {
   render() {
@@ -22,7 +24,7 @@ class Forms extends Component {
     }
 
     let form = (
-      <React.Fragment>
+      <form onSubmit={event => this.props.submit(event)}>
         {formPartsArray.map(formPart => {
           return (
             <Form title={formPart.config.title} key={formPart.id}>
@@ -51,8 +53,14 @@ class Forms extends Component {
             </Form>
           );
         })}
-      </React.Fragment>
+        <div className={classes.Button}>
+          <button disabled={!this.props.btnState}>PUBLISH EVENT</button>
+        </div>
+      </form>
     );
+    if (this.props.posted) {
+      form = <SuccessMessage />;
+    }
     return form;
   }
 }
