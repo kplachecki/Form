@@ -1,14 +1,30 @@
 .Input {
-  grid-template-columns: [label] 16% [input] auto [validation] 25%;
-  margin: 10px auto;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 10px 0px 10px;
+}
+input,
+select,
+textarea {
+  padding: 3px;
+  border: 1px solid lightgray;
+  border-radius: 2px 2px 2px 2px;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .Label {
-  grid-column-start: [label];
-  grid-column-end: [label];
-  font-weight: bold;
-  margin-bottom: 8px;
   text-transform: uppercase;
+}
+
+.Columns {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 6fr) minmax(0, 2fr);
+  grid-column-gap: 5px;
 }
 
 /* .InputElement {
@@ -29,4 +45,33 @@
 
 .Invalid {
   border: 1px solid red;
+}
+.Stretch {
+  width: 100%;
+}
+
+.FullWidth {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.NumberWidth {
+  width: 15%;
+}
+
+.Comment {
+  display: flex;
+  justify-content: space-between;
+}
+.Comment > span {
+  font-size: x-small;
+  font-style: italic;
+  color: lightgray;
+  margin: 0px;
+}
+.MainInputs > * {
+  margin-right: 10px;
+}
+.MainInputs > *:last-child {
+  margin-right: 0px;
 }

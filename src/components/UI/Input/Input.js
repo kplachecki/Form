@@ -1,5 +1,5 @@
 import React from "react";
-import classes from "./../MixedInput/MixedInput.module.css";
+import classes from "./../../../containers/InputSwitcher/InputSwitcher.module.css";
 
 const input = props => {
   if (props.type === "radio") {
@@ -14,11 +14,7 @@ const input = props => {
       } else {
         if (props.payment.value === "Paid Event") {
           const feeClasses = [];
-          console.log(
-            !props.payment.feeValid,
-            props.payment.feeValidation.required,
-            props.payment.feeTouched
-          );
+          feeClasses.push(classes.NumberWidth);
           if (
             !props.payment.feeValid &&
             props.payment.feeValidation &&
@@ -40,7 +36,13 @@ const input = props => {
       }
     });
   } else {
-    return <input {...props} />;
+    let newClassname = props.className;
+    if (props.type !== "number") {
+      newClassname = props.className + " " + classes.FullWidth;
+    } else if (props.type === "number") {
+      newClassname = props.className + " " + classes.NumberWidth;
+    }
+    return <input {...props} className={newClassname} />;
   }
 };
 
