@@ -3,6 +3,7 @@ import classes from "./InputSwitcher.module.css";
 import Select from "../../components/UI/Select/Select";
 import Input from "../../components/UI/Input/Input";
 import MixedInput from "../../components/UI/MixedInput/MixedInput";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 const inputSwitcher = props => {
   let inputElement = null;
@@ -13,7 +14,34 @@ const inputSwitcher = props => {
     case "input":
       if (!props.valid && props.shouldValidate && props.touched) {
         inputClasses.push(classes.Invalid);
-        errorMessage = <span>ERROR</span>;
+        errorMessage = (
+          <ErrorMessage>
+            <span>{props.label} can't be empty</span>
+          </ErrorMessage>
+        );
+      }
+      if (props.elementConfig.type === "email") {
+        if (!props.valid && props.shouldValidate && props.touched) {
+          inputClasses.push(classes.Invalid);
+          errorMessage = (
+            <ErrorMessage>
+              <span>Check email format</span>
+            </ErrorMessage>
+          );
+        }
+      }
+      if (props.label === "payment") {
+        if (
+          !props.payment.valid.fee &&
+          props.payment.validation.fee &&
+          props.payment.touched.fee
+        ) {
+          errorMessage = (
+            <ErrorMessage>
+              <span>Fee can't be empty</span>
+            </ErrorMessage>
+          );
+        }
       }
 
       inputElement = (
@@ -29,6 +57,11 @@ const inputSwitcher = props => {
     case "textarea":
       if (!props.valid && props.shouldValidate && props.touched) {
         inputClasses.push(classes.Invalid);
+        errorMessage = (
+          <ErrorMessage height="37px">
+            <span>{props.label} can't be empty</span>
+          </ErrorMessage>
+        );
       }
       inputClasses.push(classes.FullWidth);
       inputElement = (
@@ -43,6 +76,11 @@ const inputSwitcher = props => {
     case "select":
       if (!props.valid && props.shouldValidate && props.touched) {
         inputClasses.push(classes.Invalid);
+        errorMessage = (
+          <ErrorMessage>
+            <span>{props.label} can't be empty</span>
+          </ErrorMessage>
+        );
       }
       inputElement = (
         <Select
@@ -55,6 +93,28 @@ const inputSwitcher = props => {
       );
       break;
     case "inputDateTime":
+      if (
+        !props.valid.date &&
+        props.shouldValidate.date &&
+        props.touched.date
+      ) {
+        errorMessage = (
+          <ErrorMessage height="37px">
+            <span>{props.elementConfig.date.type} should be future date</span>
+          </ErrorMessage>
+        );
+      }
+      if (
+        !props.valid.time &&
+        props.shouldValidate.time &&
+        props.touched.time
+      ) {
+        errorMessage = (
+          <ErrorMessage height="37px">
+            <span>{props.elementConfig.time.type} should be 12h format</span>
+          </ErrorMessage>
+        );
+      }
       inputElement = (
         <MixedInput
           {...props.elementConfig}
@@ -105,19 +165,36 @@ const inputSwitcher = props => {
       </div>
     );
   }
+  let newLabel = null;
+  if (
+    props.label === "title" ||
+    props.label === "description" ||
+    props.label === "responsible" ||
+    props.label === "starts on"
+  ) {
+    newLabel = (
+      <label className={classes.Label}>
+        {props.label}
+        <span>*</span>
+      </label>
+    );
+  } else {
+    newLabel = <label className={classes.Label}>{props.label}</label>;
+  }
 
-  return (
-    <div className={classes.Input}>
-      <div className={classes.Columns}>
-        <label className={classes.Label}>{props.label}</label>
-        <div className={classes.MainInputs}>
-          {inputElement}
-          {comment}
+  if (props.label)
+    return (
+      <div className={classes.Input}>
+        <div className={classes.Columns}>
+          {newLabel}
+          <div className={classes.MainInputs}>
+            {inputElement}
+            {comment}
+          </div>
+          {errorMessage}
         </div>
-        {errorMessage}
       </div>
-    </div>
-  );
+    );
 };
 
 export default inputSwitcher;

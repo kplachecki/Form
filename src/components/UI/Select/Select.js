@@ -22,7 +22,10 @@ const select = props => {
               {props.options.map(option => {
                 if (group.label === option.label) {
                   return (
-                    <option value={option.name} key={option.id}>
+                    <option
+                      value={option.name + " " + option.lastname}
+                      key={option.id}
+                    >
                       {option.name + " " + option.lastname}
                     </option>
                   );

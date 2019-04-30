@@ -12,13 +12,13 @@ const input = props => {
           </label>
         );
       } else {
-        if (props.payment.value === "Paid Event") {
+        if (props.payment.value.radio === "Paid Event") {
           const feeClasses = [];
           feeClasses.push(classes.NumberWidth);
           if (
-            !props.payment.feeValid &&
-            props.payment.feeValidation &&
-            props.payment.feeTouched
+            !props.payment.valid.fee &&
+            props.payment.validation.fee &&
+            props.payment.touched.fee
           ) {
             feeClasses.push(classes.Invalid);
           }

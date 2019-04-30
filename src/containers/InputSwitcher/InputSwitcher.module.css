@@ -6,9 +6,10 @@
 input,
 select,
 textarea {
-  padding: 3px;
+  padding: 7px;
   border: 1px solid lightgray;
-  border-radius: 2px 2px 2px 2px;
+  border-radius: 2px;
+  font-family: inherit;
 }
 
 input[type="number"]::-webkit-outer-spin-button,
@@ -19,35 +20,22 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .Label {
   text-transform: uppercase;
+  font-size: small;
+  color: #355990;
+  font-weight: 500;
 }
-
+.Label > *:last-child {
+  color: salmon;
+}
 .Columns {
   display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(0, 6fr) minmax(0, 2fr);
+  grid-template-columns: minmax(0, 2fr) minmax(0, 6fr) minmax(0, 3fr);
+  grid-template-columns: 18% 57% 23%;
   grid-column-gap: 5px;
 }
 
-/* .InputElement {
-  border: 1px solid #ccc;
-  background-color: white;
-  font: inherit;
-} */
-/* 
-.InputElement {
-  grid-column-start: [input];
-  grid-column-end: [input];
-} */
-
-/* .InputElement:focus {
-  outline: none;
-  background-color: red;
-} */
-
 .Invalid {
-  border: 1px solid red;
-}
-.Stretch {
-  width: 100%;
+  border: 1px solid salmon;
 }
 
 .FullWidth {
@@ -71,6 +59,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 .MainInputs > * {
   margin-right: 10px;
+  font-size: small;
 }
 .MainInputs > *:last-child {
   margin-right: 0px;
