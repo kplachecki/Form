@@ -1,5 +1,5 @@
 import React from "react";
-import classes from "./MixedInput.module.css";
+import classes from "./../../../containers/InputSwitcher/InputSwitcher.module.css";
 
 const mixedInput = props => {
   const dateClasses = [];

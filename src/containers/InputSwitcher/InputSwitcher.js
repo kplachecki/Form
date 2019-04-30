@@ -6,13 +6,16 @@ import MixedInput from "../../components/UI/MixedInput/MixedInput";
 
 const inputSwitcher = props => {
   let inputElement = null;
+  let errorMessage = null;
   const inputClasses = [classes.InputElement];
 
   switch (props.elementType) {
     case "input":
       if (!props.valid && props.shouldValidate && props.touched) {
         inputClasses.push(classes.Invalid);
+        errorMessage = <span>ERROR</span>;
       }
+
       inputElement = (
         <Input
           className={inputClasses.join(" ")}
@@ -27,6 +30,7 @@ const inputSwitcher = props => {
       if (!props.valid && props.shouldValidate && props.touched) {
         inputClasses.push(classes.Invalid);
       }
+      inputClasses.push(classes.FullWidth);
       inputElement = (
         <textarea
           className={inputClasses.join(" ")}
@@ -72,21 +76,46 @@ const inputSwitcher = props => {
         />
       );
   }
-  let bigComment = null;
+  let comment = null;
 
   if (props.id === "reward") {
-    bigComment = <span>reward points for attendance</span>;
+    comment = <span>reward points for attendance</span>;
   }
 
   if (props.id === "duration") {
-    bigComment = <span>hour</span>;
+    comment = <span>hour</span>;
+  }
+
+  if (props.id === "description") {
+    comment = (
+      <div className={classes.Comment}>
+        <span>Max length {props.elementConfig.maxLength} characters</span>
+        <span>
+          {props.value.length}/{props.elementConfig.maxLength}
+        </span>
+      </div>
+    );
+  }
+  if (props.id === "category") {
+    comment = (
+      <div className={classes.Comment}>
+        <span>
+          Describes topic and people who should be intrested in this event
+        </span>
+      </div>
+    );
   }
 
   return (
     <div className={classes.Input}>
-      <label className={classes.Label}>{props.label}</label>
-      {inputElement}
-      {bigComment}
+      <div className={classes.Columns}>
+        <label className={classes.Label}>{props.label}</label>
+        <div className={classes.MainInputs}>
+          {inputElement}
+          {comment}
+        </div>
+        {errorMessage}
+      </div>
     </div>
   );
 };
