@@ -24,11 +24,12 @@
   display: flex;
   border-radius: 2px;
   width: 100%;
-  height: 23px;
   background-color: salmon;
+  justify-content: space-around;
 }
 .Rectangle > span {
   z-index: 2;
+  padding: 5px;
   align-self: center;
   color: white;
   font-size: small;
