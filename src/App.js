@@ -8,9 +8,10 @@ class App extends Component {
   state = {
     formElements: {
       title: {
-        form: "About",
         label: "title",
         elementType: "input",
+        fieldDescription: null,
+        fieldComment: null,
         elementConfig: {
           type: "text",
           placeholder: "Make it short and clear"
@@ -21,9 +22,10 @@ class App extends Component {
         touched: false
       },
       description: {
-        form: "About",
         label: "description",
         elementType: "textarea",
+        fieldDescription: null,
+        fieldComment: null,
         elementConfig: {
           placeholder: "Write about your event, be creative",
           maxLength: 140,
@@ -35,9 +37,10 @@ class App extends Component {
         touched: false
       },
       category: {
-        form: "About",
         label: "category",
         elementType: "select",
+        fieldDescription: null,
+        fieldComment: null,
         elementConfig: {
           options: (categories.unshift({
             id: "default",
@@ -50,40 +53,57 @@ class App extends Component {
         validation: {},
         valid: true
       },
-      payment: {
-        form: "About",
+      paymentRadio1: {
         label: "payment",
-        elementType: "input",
+        elementType: "radio",
+        fieldDescription: "Free Event",
+        fieldComment: null,
         elementConfig: {
           type: "radio",
-          options: [
-            {
-              type: "radio",
-              name: "payment",
-              defaultChecked: true,
-              value: "Free Event"
-            },
-            {
-              type: "radio",
-              name: "payment",
-              value: "Paid Event"
-            },
-            {
-              type: "number",
-              name: "fee",
-              placeholder: "Fee"
-            }
-          ]
+          name: "payment",
+          defaultChecked: true,
+          value: "Free Event"
         },
-        value: { radio: "Free Event", fee: "" },
-        validation: { radio: {}, fee: { required: false } },
-        valid: { radio: true, fee: false },
-        touched: { radio: true, fee: false }
+        value: null,
+        validation: {},
+        valid: true,
+        touched: true
+      },
+      paymentRadio2: {
+        label: "payment",
+        elementType: "radio",
+        fieldDescription: "Paid Event",
+        fieldComment: null,
+        elementConfig: {
+          type: "radio",
+          name: "payment",
+          value: "Paid Event"
+        },
+        value: null,
+        validation: {},
+        valid: true,
+        touched: true
+      },
+      paymentInput: {
+        label: "payment",
+        elementType: "input",
+        fieldDescription: null,
+        fieldComment: null,
+        elementConfig: {
+          type: "number",
+          name: "fee",
+          placeholder: "Fee"
+        },
+        value: "",
+        validation: { required: false },
+        valid: false,
+        touched: false
       },
       reward: {
-        form: "About",
         label: "reward",
         elementType: "input",
+        fieldDescription: "reward points for attendance",
+        fieldComment: null,
         elementConfig: {
           type: "number",
           placeholder: "Number"
@@ -94,21 +114,25 @@ class App extends Component {
         touched: false
       },
       responsible: {
-        form: "Coordinator",
         label: "responsible",
         elementType: "select",
+        fieldDescription: null,
+        fieldComment:
+          "Describes topic and people who should be intrested in this event",
         elementConfig: {
           options: employes,
           groups: [{ label: "Me" }, { label: "Others" }]
         },
         value: "",
         validation: { required: true },
-        valid: true
+        valid: false,
+        touched: false
       },
       email: {
-        form: "Coordinator",
         label: "email",
         elementType: "input",
+        fieldDescription: null,
+        fieldComment: null,
         elementConfig: {
           type: "email",
           placeholder: "Email"
@@ -121,47 +145,79 @@ class App extends Component {
         valid: true,
         touched: false
       },
-      startsOn: {
-        form: "When",
+      date: {
         label: "starts on",
-        elementType: "inputDateTime",
+        elementType: "input",
+        fieldDescription: "at",
+        fieldComment: null,
         elementConfig: {
-          date: {
-            type: "date",
-            placeholder: "dd/mm/yy",
-            name: "date"
-          },
-          time: {
-            type: "time",
-            min: "00:00",
-            max: "12:00",
-            placeholder: "--:--",
-            name: "time"
-          },
-          radio: [
-            {
-              type: "radio",
-              name: "radio",
-              value: "AM",
-              defaultChecked: true
-            },
-            { type: "radio", name: "radio", value: "PM" }
-          ]
+          type: "date",
+          placeholder: "dd/mm/yy",
+          name: "date"
         },
-        value: { date: "", time: "", radio: "AM" },
+        value: "",
+        validation: { required: true, isDate: true },
+
+        valid: false,
+        touched: false
+      },
+      time: {
+        label: "starts on",
+        elementType: "input",
+        fieldDescription: null,
+        fieldComment: null,
+        elementConfig: {
+          type: "time",
+          min: "00:00",
+          max: "12:00",
+          placeholder: "--:--",
+          name: "time"
+        },
+        value: "",
         validation: {
-          date: { required: true, isDate: true },
-          time: { required: true, isTime: true },
-          radio: {}
+          required: true,
+          isTime: true
         },
-        valid: { date: false, time: false, radio: true },
-        touched: { date: false, time: false, radio: true }
+        valid: false,
+        touched: false
+      },
+      timeRadio1: {
+        label: "starts on",
+        elementType: "radio",
+        fieldDescription: "AM",
+        fieldComment: null,
+        elementConfig: {
+          type: "radio",
+          name: "radio",
+          value: "AM",
+          defaultChecked: true
+        },
+        value: null,
+        validation: {},
+        valid: true,
+        touched: true
+      },
+      timeRadio2: {
+        label: "starts on",
+        elementType: "radio",
+        fieldDescription: "PM",
+        fieldComment: null,
+        elementConfig: {
+          type: "radio",
+          name: "radio",
+          value: "PM"
+        },
+        value: null,
+        validation: {},
+        valid: true,
+        touched: true
       },
 
       duration: {
-        form: "When",
         label: "duration",
         elementType: "input",
+        fieldDescription: "hour",
+        fieldComment: null,
         elementConfig: {
           type: "number",
           placeholder: "Number"
@@ -170,6 +226,44 @@ class App extends Component {
         validation: {},
         valid: true,
         touched: false
+      }
+    },
+    labels: {
+      title: {
+        labelTitle: "title",
+        belongsTo: "About"
+      },
+      description: {
+        labelTitle: "description",
+        belongsTo: "About"
+      },
+      category: {
+        labelTitle: "category",
+        belongsTo: "About"
+      },
+      payment: {
+        labelTitle: "payment",
+        belongsTo: "About"
+      },
+      reward: {
+        labelTitle: "reward",
+        belongsTo: "About"
+      },
+      responsible: {
+        labelTitle: "responsible",
+        belongsTo: "Coordinator"
+      },
+      email: {
+        labelTitle: "email",
+        belongsTo: "Coordinator"
+      },
+      startsOn: {
+        labelTitle: "starts on",
+        belongsTo: "When"
+      },
+      duration: {
+        labelTitle: "duration",
+        belongsTo: "When"
       }
     },
     formParts: {
@@ -184,15 +278,17 @@ class App extends Component {
       }
     },
     currentUser: "walter.nelson@hussa.rs",
+    payment: "Free Event",
+    timeOfDay: "AM",
     formIsValid: false,
     posted: false
   };
 
   dateTimeHandler = (formElements, dateTime) => {
-    let time = formElements.startsOn.value.time;
-    const date = formElements.startsOn.value.date;
+    let time = formElements.time.value;
+    const date = formElements.date.value;
     let [hours, minutes] = time.split(":");
-    const modifier = formElements.startsOn.value.radio;
+    const modifier = this.state.timeOfDay;
 
     if (hours === "12") {
       hours = "00";
@@ -216,7 +312,7 @@ class App extends Component {
     let coordinatorID = "";
     let dateTime = "";
 
-    if (formElements.payment.value !== "Free Event") {
+    if (this.state.payment !== "Free Event") {
       paidEvent = true;
     }
 
@@ -245,7 +341,7 @@ class App extends Component {
       description: formElements.description.value,
       category_id: categoryID,
       paid_event: paidEvent,
-      event_fee: formElements.payment.value.fee,
+      event_fee: formElements.paymentInput.value,
       reward: formElements.reward.value,
       date: dateTime,
       duration: formElements.duration.value * 3600,
@@ -281,7 +377,7 @@ class App extends Component {
       const yyyy = today.getFullYear();
 
       today = yyyy + "-" + mm + "-" + dd;
-      isValid = today <= value && isValid;
+      isValid = today < value && isValid;
     }
 
     if (rules.isTime) {
@@ -295,43 +391,20 @@ class App extends Component {
     const updatedForm = { ...this.state.formElements };
     const updatedFormElement = { ...updatedForm[inputElement] };
 
-    if (inputElement === "startsOn") {
-      updatedFormElement.value[event.target.name] = event.target.value;
-      updatedFormElement.valid[event.target.name] = this.checkValidity(
-        updatedFormElement.value[event.target.name],
-        updatedFormElement.validation[event.target.name]
-      );
-      updatedFormElement.touched[event.target.name] = true;
-      updatedForm[inputElement] = updatedFormElement;
-      this.setState({ formElements: updatedForm });
-      this.formValidationCheckout(updatedForm);
-    } else if (inputElement === "payment") {
+    if (
+      event.target.value === "Paid Event" ||
+      event.target.value === "Free Event"
+    ) {
       if (event.target.value === "Paid Event") {
-        updatedFormElement.value.radio = event.target.value;
-        updatedFormElement.validation.fee.required = true;
-        updatedForm[inputElement] = updatedFormElement;
-        this.setState({ formElements: updatedForm });
-        this.formValidationCheckout(updatedForm);
-      } else if (event.target.value === "Free Event") {
-        updatedFormElement.value.radio = event.target.value;
-        updatedFormElement.validation.fee.required = false;
-        updatedFormElement.touched.fee = false;
-        updatedFormElement.value.fee = "";
-        updatedForm[inputElement] = updatedFormElement;
-        this.setState({ formElements: updatedForm });
-        this.formValidationCheckout(updatedForm);
-      } else if (event.target.name === "fee") {
-        updatedFormElement.value.fee = event.target.value;
-        updatedFormElement.valid.fee = this.checkValidity(
-          updatedFormElement.value.fee,
-          updatedFormElement.validation.fee
-        );
-        updatedFormElement.touched.fee = true;
-
-        updatedForm[inputElement] = updatedFormElement;
-        this.setState({ formElements: updatedForm });
-        this.formValidationCheckout(updatedForm);
+        updatedForm.paymentInput.validation.required = true;
+      } else {
+        updatedForm.paymentInput.validation.required = false;
       }
+
+      this.setState({ payment: event.target.value, formElements: updatedForm });
+      this.formValidationCheckout(updatedForm);
+    } else if (event.target.value === "AM" || event.target.value === "PM") {
+      this.setState({ timeOfDay: event.target.value });
     } else {
       updatedFormElement.value = event.target.value;
       updatedFormElement.valid = this.checkValidity(
@@ -339,7 +412,6 @@ class App extends Component {
         updatedFormElement.validation
       );
       updatedFormElement.touched = true;
-
       updatedForm[inputElement] = updatedFormElement;
 
       this.setState({ formElements: updatedForm });
@@ -351,18 +423,19 @@ class App extends Component {
     let isValid = false;
     let payment = true;
     if (
-      form.payment.value.radio === "Paid Event" &&
-      form.payment.valid.fee === false
+      this.state.payment === "Paid Event" &&
+      form.paymentInput.valid === false
     ) {
       payment = false;
     }
     isValid = {
       title: form.title.valid,
       description: form.description.valid,
+      responsible: form.responsible.valid,
       payment: payment,
       email: form.email.valid,
-      date: form.startsOn.valid.date,
-      timie: form.startsOn.valid.time
+      date: form.date.valid,
+      timie: form.time.valid
     };
 
     let formIsValid = true;
