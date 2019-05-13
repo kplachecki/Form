@@ -34,6 +34,7 @@ const inputSwitcher = props => {
             fieldDescription={props.fieldDescription}
             fieldComment={props.fieldComment}
             required={props.shouldValidate.required}
+            value={props.value}
           />
         </React.Fragment>
       );

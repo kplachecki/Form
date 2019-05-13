@@ -11,6 +11,7 @@ const input = props => {
         {...props.elementConfig}
         className={props.className}
         onChange={props.onChange}
+        value={props.value}
       />
       {fieldDescription}
     </React.Fragment>
