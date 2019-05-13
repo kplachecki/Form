@@ -40,3 +40,14 @@
   cursor: not-allowed;
   background-color: #ccc;
 }
+
+@media (max-width: 540px) {
+  .Body {
+    width: 98%;
+    min-width: 0px;
+  }
+  .Container {
+    width: 98%;
+    min-width: 0px;
+  }
+}

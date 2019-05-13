@@ -39,3 +39,9 @@
 .Rectangle > span:first-letter {
   text-transform: uppercase;
 }
+
+@media (max-width: 540px) {
+  .Error {
+    display: none;
+  }
+}
