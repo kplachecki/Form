@@ -391,6 +391,7 @@ class App extends Component {
   inputChangeHandler = (event, inputElement) => {
     const updatedForm = { ...this.state.formElements };
     const updatedFormElement = { ...updatedForm[inputElement] };
+    let newPayment = this.state.payment;
 
     if (
       event.target.value === "Paid Event" ||
@@ -401,9 +402,9 @@ class App extends Component {
       } else {
         updatedForm.paymentInput.validation.required = false;
       }
-
-      this.setState({ payment: event.target.value, formElements: updatedForm });
-      this.formValidationCheckout(updatedForm);
+      newPayment = event.target.value;
+      this.setState({ payment: newPayment, formElements: updatedForm });
+      this.formValidationCheckout(updatedForm, newPayment);
     } else if (event.target.value === "AM" || event.target.value === "PM") {
       this.setState({ timeOfDay: event.target.value });
     } else {
@@ -416,19 +417,19 @@ class App extends Component {
       updatedForm[inputElement] = updatedFormElement;
 
       this.setState({ formElements: updatedForm });
-      this.formValidationCheckout(updatedForm);
+      this.formValidationCheckout(updatedForm, newPayment);
     }
   };
 
-  formValidationCheckout = form => {
+  formValidationCheckout = (form, newPayment) => {
     let isValid = false;
     let payment = true;
-    if (
-      this.state.payment === "Paid Event" &&
-      form.paymentInput.valid === false
-    ) {
+
+    if (newPayment === "Paid Event" && form.paymentInput.valid === false) {
       payment = false;
     }
+
+    console.log(payment, newPayment, form.paymentInput.valid);
     isValid = {
       title: form.title.valid,
       description: form.description.valid,
