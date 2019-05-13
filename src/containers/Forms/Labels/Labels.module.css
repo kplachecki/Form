@@ -11,8 +11,8 @@
 .Columns {
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(0, 6fr) minmax(0, 3fr);
-  grid-template-columns: 18% 57% 23%;
   grid-column-gap: 5px;
+  min-width: 487px;
   min-height: 33.24px;
   margin: 10px 0px 10px;
 }
