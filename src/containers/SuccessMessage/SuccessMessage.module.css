@@ -25,13 +25,3 @@
   margin-top: 5px;
   font-size: small;
 }
-
-@media (max-width: 540px) {
-  .Body {
-    width: 98%;
-    min-width: 0px;
-  }
-  .Container {
-    min-width: 0px;
-  }
-}
