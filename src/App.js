@@ -429,7 +429,6 @@ class App extends Component {
       payment = false;
     }
 
-    console.log(payment, newPayment, form.paymentInput.valid);
     isValid = {
       title: form.title.valid,
       description: form.description.valid,
