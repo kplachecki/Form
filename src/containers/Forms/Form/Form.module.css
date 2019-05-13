@@ -1,6 +1,7 @@
 .Body {
   width: 80%;
   min-width: 547px;
+  max-width: 860px;
   margin: 15px auto;
   background-color: white;
   border-radius: 3px;
