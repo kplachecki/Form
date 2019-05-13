@@ -12,6 +12,7 @@
 
 .InputNumber {
   width: 15%;
+  min-width: 47px;
 }
 
 input,
@@ -31,15 +32,6 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .Invalid {
   border: 1px solid salmon;
-}
-
-.FullWidth {
-  min-width: 100%;
-  box-sizing: border-box;
-}
-
-.NumberWidth {
-  width: 15%;
 }
 
 .Comment {

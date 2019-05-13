@@ -40,7 +40,8 @@ class App extends Component {
         label: "category",
         elementType: "select",
         fieldDescription: null,
-        fieldComment: null,
+        fieldComment:
+          "Describes topic and people who should be intrested in this event",
         elementConfig: {
           options: (categories.unshift({
             id: "default",
@@ -117,8 +118,8 @@ class App extends Component {
         label: "responsible",
         elementType: "select",
         fieldDescription: null,
-        fieldComment:
-          "Describes topic and people who should be intrested in this event",
+        fieldComment: null,
+
         elementConfig: {
           options: employes,
           groups: [{ label: "Me" }, { label: "Others" }]

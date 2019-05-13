@@ -24,3 +24,10 @@
 .MainInputs > *:last-child {
   margin-right: 0px;
 }
+
+@media (max-width: 540px) {
+  .Columns {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 3fr);
+    min-width: 0px;
+  }
+}
